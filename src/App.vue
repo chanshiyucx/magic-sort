@@ -15,10 +15,10 @@
           <span>{{ item.num }}</span>
         </div>
       </div>
-    </div>
-    <div class="btn-group">
-      <button @click="toggleAnime">{{ this.timer ? '暂停' : '开始' }}</button>
-      <button @click="init">重置</button> <button @click="switchSpeed">{{ speedTxt }}</button>
+      <div class="btn-group">
+        <button @click="toggleAnime">{{ this.timer ? '暂停' : '开始' }}</button>
+        <button @click="init">重置</button> <button @click="switchSpeed">{{ speedTxt }}</button>
+      </div>
     </div>
     <Marked></Marked>
   </div>
@@ -73,7 +73,7 @@ export default {
     generateStatus(data) {
       data.forEach((item, i) => {
         this.status[item.key] = {
-          pos: i * 40,
+          pos: i * 36,
           state: item.state
         }
       })

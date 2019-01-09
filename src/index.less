@@ -1,26 +1,42 @@
+@font-face {
+  font-family: Iosevka;
+  font-weight: bold;
+  src: url('./assets/fonts/iosevka-medium.woff2');
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: url(https://i.loli.net/2019/01/10/5c3626b269ddf.jpg) #333 repeat;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   margin-top: 60px;
   text-align: center;
   color: #2c3e50;
   .box {
-    padding: 12px 16px;
-    width: 590px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+    height: 320px;
+    width: 680px;
     background: rgba(0, 0, 0, 0.1);
     border-radius: 3px;
-    box-shadow: rgb(153, 153, 153) 11px 11px 8px -10px inset,
-      rgb(153, 153, 153) -11px -11px 8px -10px inset;
   }
   .chart {
     position: relative;
     display: flex;
     align-items: flex-end;
-    height: 280px;
+    height: 300px;
     > div {
       display: flex;
       justify-content: center;
@@ -30,7 +46,7 @@
       left: 0;
       bottom: 0;
       margin-right: 10px;
-      width: 30px;
+      width: 26px;
       background: #faa;
       transition-property: all;
       transition-timing-function: ease-in-out;
@@ -42,15 +58,14 @@
   .btn-group {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    margin-left: 10px;
-    width: 240px;
+    margin-top: 10px;
+    width: 100px;
     button {
-      margin-bottom: 6px;
+      margin-bottom: 10px;
       width: 80px;
       height: 30px;
     }
   }
-
 }

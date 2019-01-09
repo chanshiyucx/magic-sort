@@ -32,8 +32,8 @@ export default {
 
 <style lang="less" scoped>
 #marked {
-  width: 600px;
-  height: 304px;
+  width: 680px;
+  height: 320px;
   > div {
     height: 100%;
   }
