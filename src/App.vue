@@ -24,16 +24,62 @@ export default {
   name: 'app',
   data() {
     return {
-      nums: [...initData],
+      nums: [],
       status: {}, // 用来保存信息
-      snapShot: [] // 快照
+      snapShot: [], // 快照
+      timer: ''
     }
+  },
+  created() {
+    this.init()
   },
   mounted() {
     this.generateStatus(this.nums)
     this.bubbleSort()
   },
   methods: {
+    // 初始化
+    init() {
+      this.nums = [...initData]
+    },
+    // 生成位置
+    generateStatus(data) {
+      data.forEach((item, i) => {
+        this.status[item.key] = {
+          pos: i * 15,
+          active: item.active
+        }
+      })
+      this.status = { ...this.status }
+    },
+    // 获取位置
+    getStatus(key) {
+      const status = this.status[key] || { pos: 0, active: false }
+      const offsetX = status.pos
+      return {
+        transform: `translateX(${offsetX}px)`,
+        active: status.active
+      }
+    },
+    // 排序动画
+    anime() {
+      if (this.snapShot.length) {
+        const data = this.snapShot.shift()
+        this.timer = setTimeout(() => {
+          this.generateStatus(data)
+          this.anime()
+        }, 1000)
+      }
+    },
+    // 暂停
+    toggleAnime() {
+      if (this.timer) {
+        clearTimeout(this.timer)
+        this.timer = ''
+      } else {
+        this.anime()
+      }
+    },
     // 冒泡排序
     bubbleSort() {
       console.log('排序前-->', initNums)
@@ -55,35 +101,6 @@ export default {
       }
       console.log('排序后-->', this.nums)
       this.anime()
-    },
-    // 排序动画
-    anime() {
-      if (this.snapShot.length) {
-        const data = this.snapShot.shift()
-        setTimeout(() => {
-          this.generateStatus(data)
-          this.anime()
-        }, 1000)
-      }
-    },
-    // 生成位置
-    generateStatus(data) {
-      data.forEach((item, i) => {
-        this.status[item.key] = {
-          pos: i * 15,
-          active: item.active
-        }
-      })
-      this.status = { ...this.status }
-    },
-    // 获取位置
-    getStatus(key) {
-      const status = this.status[key] || { pos: 0, active: false }
-      const offsetX = status.pos
-      return {
-        transform: `translateX(${offsetX}px)`,
-        active: status.active
-      }
     }
   }
 }
