@@ -20,9 +20,12 @@
       <button @click="toggleAnime">{{ this.timer ? '暂停' : '开始' }}</button>
       <button @click="init">重置</button> <button @click="switchSpeed">{{ speedTxt }}</button>
     </div>
+    <Marked></Marked>
   </div>
 </template>
 <script>
+import Marked from './components/Marked'
+
 // 初始数据
 const initNums = [20, 72, 31, 83, 8, 44, 14, 58, 51, 66, 38, 99, 40, 25, 88]
 // 生成 key
@@ -31,7 +34,10 @@ const initData = initNums.map((num, i) => ({ num, key: `${num}_${i}` }))
 const deepCopy = data => JSON.parse(JSON.stringify(data))
 
 export default {
-  name: 'app',
+  name: 'App',
+  components: {
+    Marked
+  },
   data() {
     return {
       nums: [],
@@ -77,7 +83,7 @@ export default {
     getStatus(key) {
       const status = this.status[key] || { pos: 0, state: 0 }
       const offsetX = status.pos
-      const colors = ['#fcc', '#fb618d', '#f60']
+      const colors = ['#faa', '#fb618d', '#f60']
       return {
         transform: `translateX(${offsetX}px)`,
         color: colors[status.state]
@@ -130,13 +136,14 @@ export default {
           data[j].state = 1
           data[j + 1].state = 1
           data.forEach((o, k) => {
-            if (i === len && j === len - 1 - i) {
+            if (i === len - 2 && j === 0) {
               console.log('end-->')
               o.state = 2
             } else if (k > len - 1 - i && i > 0) {
               o.state = 2
             }
           })
+          console.log('i, j-->', i, j)
           // 保存一次快照，排序动画用
           this.snapShot.push([...data])
         }
