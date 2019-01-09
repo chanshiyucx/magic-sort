@@ -4,7 +4,7 @@
 <script>
 import marked from 'marked'
 import Prism from '../../assets/prism/prism.js'
-import { bubbleSortMd } from './sort'
+import { bubbleSort } from './md'
 
 const renderer = new marked.Renderer()
 marked.setOptions({
@@ -22,7 +22,7 @@ export default {
     }
   },
   mounted() {
-    this.html = marked(bubbleSortMd, { renderer })
+    this.html = marked(bubbleSort, { renderer })
     this.$nextTick(() => {
       Prism.highlightAll()
     })

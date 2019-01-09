@@ -137,13 +137,11 @@ export default {
           data[j + 1].state = 1
           data.forEach((o, k) => {
             if (i === len - 2 && j === 0) {
-              console.log('end-->')
               o.state = 2
             } else if (k > len - 1 - i && i > 0) {
               o.state = 2
             }
           })
-          console.log('i, j-->', i, j)
           // 保存一次快照，排序动画用
           this.snapShot.push([...data])
         }
