@@ -1,18 +1,3 @@
-@font-face {
-  font-family: Iosevka;
-  font-weight: bold;
-  src: url('./assets/fonts/iosevka-medium.woff2');
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background: url(https://i.loli.net/2019/01/10/5c3626b269ddf.jpg) #333 repeat;
-}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -26,10 +11,11 @@ body {
   .box {
     display: flex;
     justify-content: space-between;
-    padding: 10px 16px;
-    height: 320px;
+    padding: 20px 16px;
+    height: 340px;
     width: 680px;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid #262626;
     border-radius: 3px;
   }
   .chart {
@@ -60,12 +46,14 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    margin-top: 10px;
     width: 100px;
     button {
       margin-bottom: 10px;
       width: 80px;
       height: 30px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #000;
+      color: #c2c2c2;
     }
   }
 }

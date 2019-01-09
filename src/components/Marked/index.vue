@@ -33,7 +33,10 @@ export default {
 <style lang="less" scoped>
 #marked {
   width: 680px;
-  height: 320px;
+  height: 340px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #262626;
+  border-radius: 3px;
   > div {
     height: 100%;
   }
