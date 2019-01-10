@@ -2,58 +2,59 @@
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
   margin-top: 60px;
   text-align: center;
   color: #2c3e50;
   .box {
     display: flex;
-    justify-content: space-between;
-    padding: 20px 16px;
-    height: 340px;
-    width: 680px;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid #262626;
-    border-radius: 3px;
-  }
-  .chart {
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    height: 300px;
-    > div {
+    justify-content: space-around;
+    .box-left {
       display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      position: absolute;
-      padding-bottom: 2px;
-      left: 0;
-      bottom: 0;
-      margin-right: 10px;
-      width: 26px;
-      background: rgba(255, 255, 255, 0.4);
-      transition-property: all;
-      transition-timing-function: ease-in-out;
-      span {
-        color: #c2c2c2;
+      justify-content: space-between;
+      padding: 20px 16px;
+      height: 340px;
+      width: 680px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid #262626;
+      border-radius: 3px;
+      .chart {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        height: 300px;
+        > div {
+          display: flex;
+          justify-content: center;
+          align-items: flex-end;
+          position: absolute;
+          padding-bottom: 2px;
+          left: 0;
+          bottom: 0;
+          margin-right: 10px;
+          width: 26px;
+          background: rgba(255, 255, 255, 0.4);
+          transition-property: all;
+          transition-timing-function: ease-in-out;
+          span {
+            color: #c2c2c2;
+          }
+        }
       }
-    }
-  }
-  .btn-group {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100px;
-    button {
-      margin-bottom: 10px;
-      width: 80px;
-      height: 30px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid #000;
-      color: #c2c2c2;
+      .btn-group {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100px;
+        button {
+          margin-bottom: 10px;
+          width: 80px;
+          height: 30px;
+          background: rgba(0, 0, 0, 0.3);
+          border: 1px solid #000;
+          color: #c2c2c2;
+        }
+      }
     }
   }
 }

@@ -4,7 +4,7 @@
 <script>
 import marked from 'marked'
 import Prism from '../../assets/prism/prism.js'
-import { bubbleSort } from './md'
+import { bubbleSort } from './code'
 
 const renderer = new marked.Renderer()
 marked.setOptions({

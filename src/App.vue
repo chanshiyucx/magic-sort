@@ -1,30 +1,34 @@
 <template>
   <div id="app">
     <div class="box">
-      <div class="chart">
-        <div
-          v-for="item in nums"
-          :key="item.key"
-          :style="{
-            height: `${item.num * 2.8}px`,
-            transform: getStatus(item.key).transform,
-            background: getStatus(item.key).color,
-            transitionDuration: `${duration}s`
-          }"
-        >
-          <span>{{ item.num }}</span>
+      <div class="box-left">
+        <div class="chart">
+          <div
+            v-for="item in nums"
+            :key="item.key"
+            :style="{
+              height: `${item.num * 2.8}px`,
+              transform: getStatus(item.key).transform,
+              background: getStatus(item.key).color,
+              transitionDuration: `${duration}s`
+            }"
+          >
+            <span>{{ item.num }}</span>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button @click="toggleAnime">{{ this.timer ? '暂停' : '开始' }}</button>
+          <button @click="init">重置</button> <button @click="switchSpeed">{{ speedTxt }}</button>
         </div>
       </div>
-      <div class="btn-group">
-        <button @click="toggleAnime">{{ this.timer ? '暂停' : '开始' }}</button>
-        <button @click="init">重置</button> <button @click="switchSpeed">{{ speedTxt }}</button>
-      </div>
+      <Marked></Marked>
     </div>
-    <Marked></Marked>
+    <Footer></Footer>
   </div>
 </template>
 <script>
 import Marked from './components/Marked'
+import Footer from './components/Footer'
 
 // 初始数据
 const initNums = [20, 72, 31, 83, 8, 44, 14, 58, 51, 66, 38, 99, 40, 25, 88]
@@ -36,7 +40,8 @@ const deepCopy = data => JSON.parse(JSON.stringify(data))
 export default {
   name: 'App',
   components: {
-    Marked
+    Marked,
+    Footer
   },
   data() {
     return {
@@ -161,7 +166,8 @@ export default {
           this.snapShot.push([...data])
         }
       }
-      console.log('排序后-->', this.nums)
+      const sorted = this.nums.map(item => item.num)
+      console.log('排序后-->', sorted)
     }
   }
 }
