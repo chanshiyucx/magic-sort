@@ -2,10 +2,10 @@
   <div class="footer">
     <span>
       Made with <i class="icon">&#xf21e;</i> by
-      <a href="https://github.com/chanshiyucx/Tamayura"> Tamayura</a>.
+      <a href="https://github.com/chanshiyucx/magic-sort" target="_blank"> MagicSort</a>.
     </span>
     <span>
-      Design by <a href="https://chanshiyu.com"><span>蝉時雨</span></a>
+      Design by <a href="https://chanshiyu.com" target="_blank"><span>蝉時雨</span></a>
     </span>
   </div>
 </template>

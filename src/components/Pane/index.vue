@@ -31,7 +31,7 @@ import Marked from '../Marked'
 import Post from '../Post'
 
 // 初始数据
-const initNums = [20, 72, 31, 83, 8, 44, 14, 58, 51, 66, 38, 99, 40, 25, 88]
+const initNums = [20, 72, 31, 83, 9, 44, 14, 58, 51, 66, 38, 99, 40, 25, 88]
 // 生成 key
 const initData = initNums.map((num, i) => ({ num, key: `${num}_${i}` }))
 // 深拷贝
@@ -52,7 +52,7 @@ export default {
       timer: '',
       posTimer: '',
       speed: 1,
-      time: [3000, 2000, 1000],
+      time: [2200, 1600, 1000],
       colors: ['rgba(255, 255, 255, 0.4)', 'rgba(255, 128, 255, 0.5)', 'rgba(204, 85, 119, 0.5)']
     }
   },
