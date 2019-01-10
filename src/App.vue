@@ -44,7 +44,10 @@ export default {
       status: {}, // 用来保存信息
       snapShot: [], // 快照
       timer: '',
-      speed: 1
+      posTimer: '',
+      speed: 1,
+      time: [3000, 2000, 1000],
+      colors: ['rgba(255, 255, 255, 0.4)', 'rgba(255, 128, 255, 0.5)', 'rgba(204, 85, 119, 0.5)']
     }
   },
   computed: {
@@ -62,42 +65,54 @@ export default {
     // 初始化
     init() {
       clearTimeout(this.timer)
+      clearTimeout(this.posTimer)
       this.timer = ''
+      this.posTimer = ''
       this.status = {}
       this.snapShot = []
       this.nums = deepCopy(initData)
-      this.generateStatus(this.nums)
+      this.generateStatus(this.nums, true)
       this.bubbleSort()
     },
     // 生成位置
-    generateStatus(data) {
-      data.forEach((item, i) => {
-        this.status[item.key] = {
-          pos: i * 36,
-          state: item.state
-        }
-      })
-      this.status = { ...this.status }
+    generateStatus(data, init = false) {
+      const getColor = () => {
+        data.forEach(item => {
+          this.status[item.key] = { state: item.state }
+        })
+        this.status = { ...this.status }
+      }
+      const getPos = () => {
+        data.forEach((item, i) => {
+          this.status[item.key].pos = i * 36
+        })
+        this.status = { ...this.status }
+      }
+
+      // 应该在动画结束后生成新的状态，而不是在下一次动画前生成新状态
+      // pos 动画和 color 动画不应该同时进行，color 动画比 pos 动画先
+      getColor()
+      init
+        ? getPos()
+        : (this.posTimer = setTimeout(getPos, (this.time[this.speed] - this.duration) / 2))
     },
     // 获取位置
     getStatus(key) {
       const status = this.status[key] || { pos: 0, state: 0 }
       const offsetX = status.pos
-      const colors = ['#faa', '#fb618d', '#f60']
       return {
         transform: `translateX(${offsetX}px)`,
-        color: colors[status.state]
+        color: this.colors[status.state]
       }
     },
     // 排序动画
     anime() {
-      const time = [1400, 900, 600]
       if (this.snapShot.length) {
         const data = this.snapShot.shift()
+        this.generateStatus(data)
         this.timer = setTimeout(() => {
-          this.generateStatus(data)
           this.anime()
-        }, time[this.speed])
+        }, this.time[this.speed])
       } else {
         clearTimeout(this.timer)
         this.timer = ''
