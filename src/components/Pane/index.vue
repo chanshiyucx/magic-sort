@@ -52,7 +52,7 @@ export default {
       timer: '',
       posTimer: '',
       speed: 1,
-      time: [2200, 1600, 1000],
+      time: [2200, 1500, 800],
       colors: ['rgba(255, 255, 255, 0.4)', 'rgba(255, 128, 255, 0.5)', 'rgba(204, 85, 119, 0.5)']
     }
   },
@@ -151,12 +151,12 @@ export default {
     sort() {
       switch (this.type) {
         case 'bubble':
-          this.bubbleSort()
+          this.bubbleSort2()
           break
       }
     },
     // 冒泡排序
-    bubbleSort() {
+    bubbleSort1() {
       console.log('排序前-->', initNums)
       const nums = this.nums
       const len = nums.length
@@ -181,6 +181,43 @@ export default {
           this.snapShot.push([...data])
         }
       }
+      const sorted = this.nums.map(item => item.num)
+      console.log('排序后-->', sorted)
+    },
+    // 改进冒泡算法一
+    bubbleSort2() {
+      console.log('排序前-->', initNums)
+      const nums = this.nums
+      const len = nums.length
+      let i = len - 1
+      while (i > 0) {
+        let pos = 0
+        for (let j = 0; j < i; j++) {
+          if (nums[j].num > nums[j + 1].num) {
+            // 记录交换時的位置
+            pos = j
+            // 交换位置
+            ;[nums[j], nums[j + 1]] = [nums[j + 1], nums[j]]
+          }
+          // 复制数据并设置为 state
+          const data = deepCopy(nums)
+          data[j].state = 1
+          data[j + 1].state = 1
+          data.forEach((o, k) => {
+            if (k > i) {
+              o.state = 2
+            }
+          })
+          // 保存一次快照，排序动画用
+          this.snapShot.push([...data])
+        }
+        i = pos
+      }
+      // 排序完成快照
+      const data = deepCopy(nums)
+      data.forEach(o => (o.state = 2))
+      this.snapShot.push([...data])
+
       const sorted = this.nums.map(item => item.num)
       console.log('排序后-->', sorted)
     }
