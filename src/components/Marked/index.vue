@@ -1,5 +1,10 @@
 <template>
-  <div id="marked"><div v-html="html"></div></div>
+  <div id="marked">
+    <Tabs v-model="curTab">
+      <TabPane v-for="t in title" :key="t" :name="t" :label="t"></TabPane>
+    </Tabs>
+    <div v-html="html"></div>
+  </div>
 </template>
 <script>
 import marked from 'marked'
@@ -18,14 +23,39 @@ export default {
   name: 'Marked',
   data() {
     return {
-      html: ''
+      html: '',
+      section: [],
+      curTab: ''
+    }
+  },
+  computed: {
+    title() {
+      return this.section.map(o => o.title)
     }
   },
   mounted() {
-    this.html = marked(bubbleSort, { renderer })
-    this.$nextTick(() => {
-      Prism.highlightAll()
-    })
+    // 将内容拆分成块
+    this.section = bubbleSort
+      .trim()
+      .split('## ')
+      .filter(o => o.length)
+      .map(o => {
+        const title = o.match(/.+?\r\n/)[0]
+        return {
+          title,
+          content: o.slice(title.length)
+        }
+      })
+    this.curTab = this.section[0].title
+    this.renderContent()
+  },
+  methods: {
+    renderContent(i = 0) {
+      this.html = marked(this.section[i].content, { renderer })
+      this.$nextTick(() => {
+        Prism.highlightAll()
+      })
+    }
   }
 }
 </script>
