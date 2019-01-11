@@ -19,7 +19,6 @@ pre[class*='language-'] {
   -ms-hyphens: none;
   hyphens: none;
   box-sizing: border-box;
-  padding: 10px;
 }
 
 pre[class*='language-']::-moz-selection,
@@ -43,7 +42,8 @@ code[class*='language-'] ::selection {
 /* Code blocks */
 
 pre[class*='language-'] {
-  padding: 1em;
+  margin-top: 0.1rem;
+  padding: 0.3rem 1em 1.6rem;
   overflow: auto;
 }
 
@@ -58,7 +58,7 @@ pre[class*='language-'] {
     background-color: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: #888;
+    background-color: #444;
     background-image: -webkit-linear-gradient(
       45deg,
       rgba(255, 255, 255, 0.6) 25%,

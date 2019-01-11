@@ -3,12 +3,24 @@
     <Post />
     <div class="box">
       <div class="box-left">
+        <div class="info">
+          <p>
+            当前排序算法：<span class="name">{{ curSortTab }}</span>
+          </p>
+          <p>输入值：[20, 72, 31, 83, 9, 44, 14, 58, 51, 66, 38, 99, 40, 25, 88]</p>
+          <p>输出值：[9, 14, 20, 25, 31, 38, 40, 44, 51, 58, 66, 72, 83, 88, 99]</p>
+          <p>千次排序总时长：{{ total }} ms 【数值可能有浮动，仅供参考】</p>
+          <div class="btn-group">
+            <button @click="toggleAnime">{{ this.timer ? '暂停' : '开始' }}</button>
+            <button @click="init">重置</button> <button @click="switchSpeed">{{ speedTxt }}</button>
+          </div>
+        </div>
         <div class="chart">
           <div
             v-for="item in nums"
             :key="item.key"
             :style="{
-              height: `${item.num * 2.8}px`,
+              height: `${item.num * 3}px`,
               transform: getStatus(item.key).transform,
               background: getStatus(item.key).color,
               transitionDuration: `${duration}s`
@@ -17,18 +29,43 @@
             <span>{{ item.num }}</span>
           </div>
         </div>
-        <div class="btn-group">
-          <button @click="toggleAnime">{{ this.timer ? '暂停' : '开始' }}</button>
-          <button @click="init">重置</button> <button @click="switchSpeed">{{ speedTxt }}</button>
+      </div>
+      <div class="marked">
+        <Tabs v-model="curSortTab">
+          <TabPane v-for="item in section" :key="item.title" :name="item.title" :label="item.title">
+            <div class="md-pane" v-html="getHtml(item.content)"></div>
+          </TabPane>
+        </Tabs>
+        <div class="code-btn-box">
+          <a href="#code-header" class="top dark-btn" id="go-top"><i class="icon">&#xe800;</i> </a>
+          <a href="#code-footer" class="top dark-btn" id="go-top"><i class="icon">&#xe801;</i> </a>
         </div>
       </div>
-      <Marked />
     </div>
   </div>
 </template>
 <script>
-import Marked from '../Marked'
+import marked from 'marked'
 import Post from '../Post'
+import Prism from '../../assets/prism/prism.js'
+import { bubbleSort } from './md'
+import * as algorithm from './algorithm'
+
+const renderer = new marked.Renderer()
+marked.setOptions({
+  renderer,
+  highlight: (code, lang) => {
+    return Prism.highlight(code, Prism.languages[lang || 'markup'], lang)
+  }
+})
+
+const mapping = {
+  bubble: [
+    { name: '基础冒泡算法', sortType: 'bubbleSort1' },
+    { name: '改进冒泡算法', sortType: 'bubbleSort2' },
+    { name: '终极冒泡算法', sortType: 'bubbleSort3' }
+  ]
+}
 
 // 初始数据
 const initNums = [20, 72, 31, 83, 9, 44, 14, 58, 51, 66, 38, 99, 40, 25, 88]
@@ -40,12 +77,16 @@ const deepCopy = data => JSON.parse(JSON.stringify(data))
 export default {
   name: 'App',
   components: {
-    Marked,
     Post
   },
   props: ['type', 'curTab'],
   data() {
     return {
+      html: '',
+      section: [],
+      curSortTab: '',
+      sortType: '',
+      total: 0,
       nums: [],
       status: {}, // 用来保存信息
       snapShot: [], // 快照
@@ -69,12 +110,54 @@ export default {
       if (val !== this.type) {
         this.init()
       }
+    },
+    curSortTab(val, oldVal) {
+      if (val !== oldVal) {
+        this.getSortType()
+      }
     }
   },
   created() {
+    this.getSection()
+    this.getSortType()
     this.init()
   },
   methods: {
+    // 将内容拆分成块
+    getSection() {
+      this.section = bubbleSort
+        .trim()
+        .split('## ')
+        .filter(o => o.length)
+        .map(o => {
+          const title = o.match(/.+?\r\n/)[0].trim()
+          return {
+            title,
+            content: o.slice(title.length)
+          }
+        })
+      this.curSortTab = this.section[0].title
+      this.renderContent()
+    },
+    // 将右侧算法分块
+    renderContent(i = 0) {
+      this.html = marked(this.section[i].content, { renderer })
+      this.$nextTick(() => {
+        Prism.highlightAll()
+      })
+    },
+    // 生成右侧 html
+    getHtml(content) {
+      return marked(content, { renderer })
+    },
+    // 采用哪种排序算法
+    getSortType() {
+      if (mapping[this.type]) {
+        this.sortType = mapping[this.type].find(o => o.name === this.curSortTab).sortType
+        this.$nextTick(this.getTime)
+        this.init()
+      }
+    },
     // 初始化
     init() {
       clearTimeout(this.timer)
@@ -86,6 +169,10 @@ export default {
       this.nums = deepCopy(initData)
       this.generateStatus(this.nums, true)
       this.sort()
+    },
+    // 排序
+    sort() {
+      if (this[this.sortType]) this[this.sortType]()
     },
     // 生成位置
     generateStatus(data, init = false) {
@@ -148,25 +235,14 @@ export default {
         this.speed += 1
       }
     },
-    sort() {
-      switch (this.type) {
-        case 'bubble1':
-          this.bubbleSort1()
-          break
-        case 'bubble2':
-          this.bubbleSort2()
-          break
-      }
-    },
 
     /**
      * ===================================
      *              冒泡排序
      * ===================================
      **/
-    // 冒泡排序基础算法
+    // 基础冒泡算法
     bubbleSort1() {
-      console.log('排序前-->', initNums)
       const nums = this.nums
       const len = nums.length
       for (let i = 0; i < len; i++) {
@@ -175,7 +251,7 @@ export default {
             // 交换位置
             ;[nums[j], nums[j + 1]] = [nums[j + 1], nums[j]]
           }
-          // 复制数据并设置为 state
+          // 制作动画帧
           const data = deepCopy(nums)
           data[j].state = 1
           data[j + 1].state = 1
@@ -186,16 +262,14 @@ export default {
               o.state = 2
             }
           })
-          // 保存一次快照，排序动画用
           this.snapShot.push([...data])
         }
       }
       const sorted = this.nums.map(item => item.num)
-      console.log('排序后-->', sorted)
+      console.log('bubbleSort1 排序后-->', sorted)
     },
-    // 改进冒泡算法一
+    // 改进冒泡算法
     bubbleSort2() {
-      console.log('排序前-->', initNums)
       const nums = this.nums
       const len = nums.length
       let i = len - 1
@@ -208,7 +282,7 @@ export default {
             // 交换位置
             ;[nums[j], nums[j + 1]] = [nums[j + 1], nums[j]]
           }
-          // 复制数据并设置为 state
+          // 制作动画帧
           const data = deepCopy(nums)
           data[j].state = 1
           data[j + 1].state = 1
@@ -217,18 +291,87 @@ export default {
               o.state = 2
             }
           })
-          // 保存一次快照，排序动画用
           this.snapShot.push([...data])
         }
         i = pos
       }
-      // 排序完成快照
+      // 制作动画帧
       const data = deepCopy(nums)
       data.forEach(o => (o.state = 2))
       this.snapShot.push([...data])
 
       const sorted = this.nums.map(item => item.num)
-      console.log('排序后-->', sorted)
+      console.log('bubbleSort2 排序后-->', sorted)
+    },
+    // 终极冒泡算法
+    bubbleSort3() {
+      const nums = this.nums
+      let low = 0
+      let high = nums.length - 1
+      let i
+      while (low < high) {
+        for (i = low; i < high; ++i) {
+          // 正向排序，找出最大值
+          if (nums[i].num > nums[i + 1].num) {
+            // 交换位置
+            ;[nums[i], nums[i + 1]] = [nums[i + 1], nums[i]]
+          }
+          // 制作动画帧
+          const data = deepCopy(nums)
+          data[i].state = 1
+          data[i + 1].state = 1
+          data.forEach((o, k) => {
+            if (k > high || k < low) {
+              o.state = 2
+            }
+          })
+          this.snapShot.push([...data])
+        }
+        --high
+
+        for (i = high; i > low; --i) {
+          // 反向排序，找出最小值
+          if (nums[i].num < nums[i - 1].num) {
+            // 交换位置
+            ;[nums[i], nums[i - 1]] = [nums[i - 1], nums[i]]
+          }
+          // 制作动画帧
+          const data = deepCopy(nums)
+          data[i].state = 1
+          data[i - 1].state = 1
+          data.forEach((o, k) => {
+            if (k > high || k < low) {
+              o.state = 2
+            }
+          })
+          this.snapShot.push([...data])
+        }
+        ++low
+      }
+      const data = deepCopy(nums)
+      data.forEach(o => {
+        o.state = 2
+      })
+      this.snapShot.push([...data])
+
+      const sorted = this.nums.map(item => item.num)
+      console.log('bubbleSort3 排序后-->', sorted)
+    },
+    /**
+     * ===================================
+     *            获取算法运行时长
+     * ===================================
+     **/
+    getTime() {
+      if (!algorithm[this.sortType]) return
+      const startTime = performance.now()
+      for (let i = 0; i < 1000; i++) {
+        const temp = [...initNums]
+        algorithm[this.sortType](temp)
+      }
+      const endTime = performance.now()
+      const total = endTime - startTime
+      this.total = String(total).slice(0, 6)
     }
   }
 }
