@@ -33,12 +33,19 @@ export default {
 <style lang="less" scoped>
 #marked {
   width: 680px;
-  height: 340px;
+  height: 380px;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid #262626;
   border-radius: 3px;
   > div {
     height: 100%;
+    /deep/p {
+      padding: 12px 16px;
+      line-height: 1.6;
+      color: #aaa;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.3);
+    }
   }
 }
 </style>

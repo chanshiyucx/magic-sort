@@ -22,7 +22,7 @@
           <button @click="init">重置</button> <button @click="switchSpeed">{{ speedTxt }}</button>
         </div>
       </div>
-      <Marked></Marked>
+      <Marked />
     </div>
   </div>
 </template>
@@ -150,12 +150,21 @@ export default {
     },
     sort() {
       switch (this.type) {
-        case 'bubble':
+        case 'bubble1':
+          this.bubbleSort1()
+          break
+        case 'bubble2':
           this.bubbleSort2()
           break
       }
     },
-    // 冒泡排序
+
+    /**
+     * ===================================
+     *              冒泡排序
+     * ===================================
+     **/
+    // 冒泡排序基础算法
     bubbleSort1() {
       console.log('排序前-->', initNums)
       const nums = this.nums
