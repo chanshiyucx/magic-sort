@@ -2,12 +2,12 @@
  * @Author: 蝉时雨
  * @Date: 2019-01-11 21:31:58
  * @Last Modified by: chenxin
- * @Last Modified time: 2019-01-11 23:50:22
+ * @Last Modified time: 2019-01-12 22:49:26
  * @Description: 获取算法运行时间
  */
 
 /**
- * 基础冒泡算法
+ * 经典冒泡算法
  */
 export const bubbleSort1 = nums => {
   const len = nums.length
@@ -18,10 +18,11 @@ export const bubbleSort1 = nums => {
       }
     }
   }
+  return nums
 }
 
 /**
- * 基础冒泡算法
+ * 经典冒泡算法
  */
 export const bubbleSort2 = nums => {
   const len = nums.length
@@ -36,6 +37,7 @@ export const bubbleSort2 = nums => {
     }
     i = pos
   }
+  return nums
 }
 
 /**
@@ -62,4 +64,23 @@ export const bubbleSort3 = nums => {
     }
     ++low
   }
+  return nums
+}
+
+/**
+ * 经典选择算法
+ */
+export const selectionSort = nums => {
+  const len = nums.length
+  let min = 0
+  for (let i = 0; i < len - 1; i++) {
+    min = i
+    for (let j = i + 1; j < len; j++) {
+      if (nums[min] > nums[j]) {
+        min = j
+      }
+    }
+    ;[nums[i], nums[min]] = [nums[min], nums[i]] // 交换位置
+  }
+  return nums
 }

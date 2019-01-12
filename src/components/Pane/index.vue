@@ -49,7 +49,7 @@
 import marked from 'marked'
 import Post from '../Post'
 import Prism from '../../assets/prism/prism.js'
-import { bubbleSort } from './md'
+import { bubbleSort, selectionSort } from './md'
 import * as algorithm from './algorithm'
 
 const renderer = new marked.Renderer()
@@ -60,12 +60,20 @@ marked.setOptions({
   }
 })
 
+// 所有算法描述
+const allSort = {
+  bubble: bubbleSort,
+  selection: selectionSort
+}
+
+// 算法对应
 const mapping = {
   bubble: [
-    { name: '基础冒泡算法', sortType: 'bubbleSort1' },
+    { name: '经典冒泡算法', sortType: 'bubbleSort1' },
     { name: '改进冒泡算法', sortType: 'bubbleSort2' },
     { name: '终极冒泡算法', sortType: 'bubbleSort3' }
-  ]
+  ],
+  selection: [{ name: '经典选择算法', sortType: 'selectionSort' }]
 }
 
 // 初始数据
@@ -94,13 +102,18 @@ export default {
       timer: '',
       posTimer: '',
       speed: 1,
-      time: [2200, 1500, 800],
-      colors: ['rgba(255, 255, 255, 0.4)', 'rgba(255, 128, 255, 0.5)', 'rgba(204, 85, 119, 0.5)']
+      time: [1600, 1100, 600],
+      colors: [
+        'rgba(255, 255, 255, 0.4)',
+        'rgba(255, 128, 255, 0.5)',
+        'rgba(204, 85, 119, 0.5)',
+        'rgba(243, 112, 24, 0.7)'
+      ]
     }
   },
   computed: {
     duration() {
-      return [0.7, 0.5, 0.3][this.speed]
+      return [0.5, 0.4, 0.3][this.speed]
     },
     speedTxt() {
       return ['一倍速', '二倍速', '三倍速'][this.speed]
@@ -108,7 +121,7 @@ export default {
   },
   watch: {
     curTab(val) {
-      if (val !== this.type) {
+      if (val === this.type) {
         this.init()
       }
     },
@@ -121,12 +134,11 @@ export default {
   created() {
     this.getSection()
     this.getSortType()
-    this.init()
   },
   methods: {
     // 将内容拆分成块
     getSection() {
-      this.section = bubbleSort
+      this.section = (allSort[this.type] || bubbleSort)
         .trim()
         .split('## ')
         .filter(o => o.length)
@@ -243,12 +255,6 @@ export default {
         top: pos,
         behavior: 'smooth'
       })
-
-      function a(b) {
-        return Object.prototype.toString.call(b).slice(-6, -1)
-      }
-      a({})
-      a([])
     },
 
     /**
@@ -256,7 +262,7 @@ export default {
      *              冒泡排序
      * ===================================
      **/
-    // 基础冒泡算法
+    // 经典冒泡算法
     bubbleSort1() {
       const nums = this.nums
       const len = nums.length
@@ -372,6 +378,78 @@ export default {
       const sorted = this.nums.map(item => item.num)
       console.log('bubbleSort3 排序后-->', sorted)
     },
+    /**
+     * ===================================
+     *              选择排序
+     * ===================================
+     **/
+    selectionSort() {
+      const nums = this.nums
+      const len = nums.length
+      let min = 0
+      let data
+      for (let i = 0; i < len - 1; i++) {
+        min = i
+        // 制作动画帧
+        data = deepCopy(nums)
+        data[min].state = 3
+        data.forEach((o, k) => {
+          if (k < i) {
+            o.state = 2
+          }
+        })
+        this.snapShot.push([...data])
+        for (let j = i + 1; j < len; j++) {
+          let temp = min
+          if (nums[min].num > nums[j].num) {
+            min = j
+          }
+          // 制作动画帧
+          if (min === j) {
+            data = deepCopy(nums)
+            data[j].state = 1
+            data[temp].state = 3
+            data.forEach((o, k) => {
+              if (k < i) {
+                o.state = 2
+              }
+            })
+            this.snapShot.push([...data])
+          }
+
+          data = deepCopy(nums)
+          data[j].state = 1
+          data[min].state = 3
+          data.forEach((o, k) => {
+            if (k < i) {
+              o.state = 2
+            }
+          })
+          this.snapShot.push([...data])
+        }
+        ;[nums[i], nums[min]] = [nums[min], nums[i]] // 交换位置
+
+        // 制作动画帧
+        data = deepCopy(nums)
+        data[i].state = 3
+        data[min].state = 3
+        data.forEach((o, k) => {
+          if (k < i) {
+            o.state = 2
+          }
+        })
+        this.snapShot.push([...data])
+      }
+      data = deepCopy(nums)
+      data.forEach(o => {
+        o.state = 2
+      })
+      this.snapShot.push([...data])
+
+      const sorted = this.nums.map(item => item.num)
+      console.log('selectionSort 排序后-->', sorted)
+    },
+
     /**
      * ===================================
      *            获取算法运行时长

@@ -1,13 +1,13 @@
-## 基础冒泡算法
+## 经典冒泡算法
 
-基础冒泡算法：通过双层循环实现排序，外层循环表示当前是第几轮排序，内层循环表示当前轮的第几次排序，通过两两比较交换位置完成排序。
+经典冒泡算法：通过双层循环实现排序，外层循环表示当前是第几轮排序，内层循环表示当前轮的第几次排序，通过两两比较交换位置完成排序。
 
 ```javascript
 function bubbleSort(nums) {
   const len = nums.length
   for (let i = 0; i < len; i++) {
     for (let j = 0; j < len - 1 - i; j++) {
-      if (nums[j].num > nums[j + 1].num) {
+      if (nums[j] > nums[j + 1]) {
         ;[nums[j], nums[j + 1]] = [nums[j + 1], nums[j]] // 交换位置
       }
     }
@@ -27,7 +27,7 @@ function bubbleSort(nums) {
   while (i > 0) {
     let pos = 0
     for (let j = 0; j < i; j++) {
-      if (nums[j].num > nums[j + 1].num) {
+      if (nums[j] > nums[j + 1]) {
         pos = j // 记录交换時的位置
         ;[nums[j], nums[j + 1]] = [nums[j + 1], nums[j]] // 交换位置
       }
@@ -50,7 +50,7 @@ function bubbleSort(nums) {
   while (low < high) {
     // 正向排序，找出最大值
     for (i = low; i < high; ++i) {
-      if (nums[i].num > nums[i + 1].num) {
+      if (nums[i] > nums[i + 1]) {
         ;[nums[i], nums[i + 1]] = [nums[i + 1], nums[i]] // 交换位置
       }
     }
@@ -58,7 +58,7 @@ function bubbleSort(nums) {
 
     // 反向排序，找出最小值
     for (i = high; i > low; --i) {
-      if (nums[i].num < nums[i - 1].num) {
+      if (nums[i] < nums[i - 1]) {
         ;[nums[i], nums[i - 1]] = [nums[i - 1], nums[i]] // 交换位置
       }
     }
