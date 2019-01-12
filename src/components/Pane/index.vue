@@ -5,7 +5,7 @@
       <div class="box-left">
         <div class="info">
           <p>
-            当前排序算法：<span class="name">{{ curSortTab }}</span>
+            当前排序算法： <span class="name">{{ curSortTab }}</span>
           </p>
           <p>输入值：[20, 72, 31, 83, 9, 44, 14, 58, 51, 66, 38, 99, 40, 25, 88]</p>
           <p>输出值：[9, 14, 20, 25, 31, 38, 40, 44, 51, 58, 66, 72, 83, 88, 99]</p>
@@ -33,12 +33,12 @@
       <div class="marked">
         <Tabs v-model="curSortTab">
           <TabPane v-for="item in section" :key="item.title" :name="item.title" :label="item.title">
-            <div class="md-pane" v-html="getHtml(item.content)"></div>
+            <div class="md-pane" :ref="item.title" v-html="getHtml(item.content)"></div>
           </TabPane>
         </Tabs>
         <div class="code-btn-box">
-          <a href="#code-header" class="top dark-btn" id="go-top"><i class="icon">&#xe800;</i> </a>
-          <a href="#code-footer" class="top dark-btn" id="go-top"><i class="icon">&#xe801;</i> </a>
+          <a class="top dark-btn" @click="scrollTop"> <i class="icon">&#xe800;</i> </a>
+          <a class="top dark-btn"> <i class="icon">&#xe801;</i> </a>
         </div>
       </div>
     </div>
@@ -233,6 +233,22 @@ export default {
         this.speed = 0
       } else {
         this.speed += 1
+      }
+    },
+    // 滚动
+    scrollTop() {
+      console.log('refs', this.$refs)
+      // 哪个 box
+      const box = document.getElementsByClassName('.line-numbers')[0]
+      console.log(box)
+
+      if (box) {
+        console.log('scroll', box)
+        box.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        })
+        box.scrollTop = 0
       }
     },
 
