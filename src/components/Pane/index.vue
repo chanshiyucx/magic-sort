@@ -137,11 +137,6 @@ export default {
           }
         })
       this.curSortTab = this.section[0].title
-      this.renderContent()
-    },
-    // 将右侧算法分块
-    renderContent(i = 0) {
-      this.html = marked(this.section[i].content, { renderer })
       this.$nextTick(() => {
         Prism.highlightAll()
       })
