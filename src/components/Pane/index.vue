@@ -1,6 +1,6 @@
 <template>
   <div class="pane">
-    <Post />
+    <Post :type="type" />
     <div class="box">
       <div class="box-left">
         <div class="info">
@@ -33,12 +33,13 @@
       <div class="marked">
         <Tabs v-model="curSortTab">
           <TabPane v-for="item in section" :key="item.title" :name="item.title" :label="item.title">
-            <div class="md-pane" :ref="item.title" v-html="getHtml(item.content)"></div>
+            <div v-html="getHtml(item.desc)"></div>
+            <div class="md-pane" :id="item.title" v-html="getHtml(item.code)"></div>
           </TabPane>
         </Tabs>
         <div class="code-btn-box">
-          <a class="top dark-btn" @click="scrollTop"> <i class="icon">&#xe800;</i> </a>
-          <a class="top dark-btn"> <i class="icon">&#xe801;</i> </a>
+          <a class="dark-btn" @click="scrollTo('top')"> <i class="icon">&#xe800;</i> </a>
+          <a class="dark-btn" @click="scrollTo('bottom')"> <i class="icon">&#xe801;</i> </a>
         </div>
       </div>
     </div>
@@ -131,9 +132,13 @@ export default {
         .filter(o => o.length)
         .map(o => {
           const title = o.match(/.+?\r\n/)[0].trim()
+          const rest = o.slice(title.length)
+          const desc = rest.split('```')[0]
+          const code = rest.slice(desc.length)
           return {
             title,
-            content: o.slice(title.length)
+            desc,
+            code
           }
         })
       this.curSortTab = this.section[0].title
@@ -149,8 +154,8 @@ export default {
     getSortType() {
       if (mapping[this.type]) {
         this.sortType = mapping[this.type].find(o => o.name === this.curSortTab).sortType
-        this.$nextTick(this.getTime)
         this.init()
+        this.$nextTick(this.getTime)
       }
     },
     // 初始化
@@ -231,20 +236,19 @@ export default {
       }
     },
     // 滚动
-    scrollTop() {
-      console.log('refs', this.$refs)
-      // 哪个 box
-      const box = document.getElementsByClassName('.line-numbers')[0]
-      console.log(box)
+    scrollTo(type) {
+      const box = document.getElementById(this.curSortTab).getElementsByTagName('pre')[0]
+      const pos = type === 'top' ? 0 : box.scrollHeight
+      box.scrollTo({
+        top: pos,
+        behavior: 'smooth'
+      })
 
-      if (box) {
-        console.log('scroll', box)
-        box.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        })
-        box.scrollTop = 0
+      function a(b) {
+        return Object.prototype.toString.call(b).slice(-6, -1)
       }
+      a({})
+      a([])
     },
 
     /**

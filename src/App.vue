@@ -43,7 +43,7 @@ export default {
     return {
       tabs: [
         { label: '冒泡排序', type: 'bubble' },
-        { label: '选择排序', type: 'name1' },
+        { label: '选择排序', type: 'selection' },
         { label: '插入排序', type: 'name2' },
         { label: '希尔排序', type: 'name3' },
         { label: '归并排序', type: 'name4' },
