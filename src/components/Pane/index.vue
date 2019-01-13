@@ -230,8 +230,16 @@ export default {
         this.timer = ''
       }
     },
-    // 暂停
+    // 暂停/开始
     toggleAnime() {
+      if (!this.snapShot.length) {
+        this.init()
+        setTimeout(() => {
+          this.anime()
+        }, 1000)
+        return
+      }
+
       if (this.timer) {
         clearTimeout(this.timer)
         this.timer = ''
