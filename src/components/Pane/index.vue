@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-      <div class="marked">
+      <div class="marked" v-if="type === curTab">
         <Tabs v-model="curSortTab">
           <TabPane v-for="item in section" :key="item.title" :name="item.title" :label="item.title">
             <div v-html="getHtml(item.desc)"></div>
@@ -49,7 +49,7 @@
 import marked from 'marked'
 import Post from '../Post'
 import Prism from '../../assets/prism/prism.js'
-import { bubbleSort, selectionSort } from './md'
+import { bubbleSort, selectionSort, insertionSort } from './md'
 import * as algorithm from './algorithm'
 
 const renderer = new marked.Renderer()
@@ -63,7 +63,8 @@ marked.setOptions({
 // 所有算法描述
 const allSort = {
   bubble: bubbleSort,
-  selection: selectionSort
+  selection: selectionSort,
+  insertion: insertionSort
 }
 
 // 算法对应
@@ -73,7 +74,8 @@ const mapping = {
     { name: '改进冒泡算法', sortType: 'bubbleSort2' },
     { name: '终极冒泡算法', sortType: 'bubbleSort3' }
   ],
-  selection: [{ name: '经典选择算法', sortType: 'selectionSort' }]
+  selection: [{ name: '经典选择算法', sortType: 'selectionSort' }],
+  insertion: [{ name: '经典插入算法', sortType: 'insertionSort1' }]
 }
 
 // 初始数据
@@ -133,7 +135,6 @@ export default {
   },
   created() {
     this.getSection()
-    this.getSortType()
   },
   methods: {
     // 将内容拆分成块
@@ -166,8 +167,10 @@ export default {
     getSortType() {
       if (mapping[this.type]) {
         this.sortType = mapping[this.type].find(o => o.name === this.curSortTab).sortType
-        this.init()
-        this.$nextTick(this.getTime)
+        if (this.curTab === this.type) {
+          this.init()
+          this.$nextTick(this.getTime)
+        }
       }
     },
     // 初始化
@@ -457,7 +460,83 @@ export default {
       const sorted = this.nums.map(item => item.num)
       console.log('selectionSort 排序后-->', sorted)
     },
+    /**
+     * ===================================
+     *              插入排序
+     * ===================================
+     **/
+    insertionSort1() {
+      const nums = this.nums
+      const len = nums.length
+      let data
+      for (let i = 1; i < len; i++) {
+        let k = nums[i]
+        let j = i - 1
 
+        // 下一个
+        data = deepCopy(nums)
+        data.forEach((o, k) => {
+          if (k < i) {
+            o.state = 2
+          }
+        })
+        if (i > 1) data[i].state = 3
+        this.snapShot.push(data)
+        console.log('111', data.map(o => o.state))
+
+        // 先行比较
+        if (nums[j].num <= k.num) {
+          data = deepCopy(nums)
+          data.forEach((o, k) => {
+            if (k < i) {
+              o.state = 2
+            }
+          })
+          data[j + 1].state = 3
+          this.snapShot.push(deepCopy(data))
+          console.log('2221', data.map(o => o.state))
+          data[j].state = 1
+          this.snapShot.push(deepCopy(data))
+          console.log('2222', data.map(o => o.state))
+        }
+
+        while (j >= 0 && nums[j].num > k.num) {
+          ;[nums[j], nums[j + 1]] = [nums[j + 1], nums[j]]
+
+          j--
+
+          data = deepCopy(nums)
+          data.forEach((o, k) => {
+            if (k <= i) {
+              o.state = 2
+            }
+          })
+          data[j + 1].state = 3
+          if (j < len - 2) data[j + 2].state = 1
+          this.snapShot.push(data)
+          console.log('333', data.map(o => o.state))
+        }
+        ;[nums[j + 1], k] = [k, nums[j + 1]]
+
+        data = deepCopy(nums)
+        data.forEach((o, k) => {
+          if (k <= i) {
+            o.state = 2
+          }
+        })
+        this.snapShot.push(data)
+        console.log('444', data.map(o => o.state))
+      }
+
+      data = deepCopy(nums)
+      data.forEach(o => {
+        o.state = 2
+      })
+      this.snapShot.push(deepCopy(data))
+
+      const sorted = this.nums.map(item => item.num)
+      console.log('insertionSort1 排序后-->', sorted)
+    },
     /**
      * ===================================
      *            获取算法运行时长

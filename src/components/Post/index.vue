@@ -1,17 +1,21 @@
 <template>
   <div class="post">
-    <BubbleSort v-if="type === 'bubble'" /><SelectionSort v-if="type === 'selection'" />
+    <BubbleSort v-if="type === 'bubble'" />
+    <SelectionSort v-if="type === 'selection'" />
+    <InsertionSort v-if="type === 'insertion'" />
   </div>
 </template>
 <script>
 import BubbleSort from './bubbleSort'
 import SelectionSort from './selectionSort'
+import InsertionSort from './insertionSort'
 
 export default {
   name: 'Post',
   components: {
     BubbleSort,
-    SelectionSort
+    SelectionSort,
+    InsertionSort
   },
   props: ['type']
 }

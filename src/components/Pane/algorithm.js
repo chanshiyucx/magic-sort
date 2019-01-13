@@ -2,7 +2,7 @@
  * @Author: 蝉时雨
  * @Date: 2019-01-11 21:31:58
  * @Last Modified by: chenxin
- * @Last Modified time: 2019-01-12 22:49:26
+ * @Last Modified time: 2019-01-13 11:18:03
  * @Description: 获取算法运行时间
  */
 
@@ -71,6 +71,24 @@ export const bubbleSort3 = nums => {
  * 经典选择算法
  */
 export const selectionSort = nums => {
+  const len = nums.length
+  let min = 0
+  for (let i = 0; i < len - 1; i++) {
+    min = i
+    for (let j = i + 1; j < len; j++) {
+      if (nums[min] > nums[j]) {
+        min = j
+      }
+    }
+    ;[nums[i], nums[min]] = [nums[min], nums[i]] // 交换位置
+  }
+  return nums
+}
+
+/**
+ * 经典选择算法
+ */
+export const insertionSort1 = nums => {
   const len = nums.length
   let min = 0
   for (let i = 0; i < len - 1; i++) {

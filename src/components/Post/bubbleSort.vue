@@ -23,6 +23,6 @@
 </template>
 <script>
 export default {
-  name: 'bubbleSort'
+  name: 'BubbleSort'
 }
 </script>
