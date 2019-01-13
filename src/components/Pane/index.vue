@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-      <div class="marked" v-if="type === curTab">
+      <div class="marked">
         <Tabs v-model="curSortTab">
           <TabPane v-for="item in section" :key="item.title" :name="item.title" :label="item.title">
             <div v-html="getHtml(item.desc)"></div>
@@ -75,7 +75,10 @@ const mapping = {
     { name: '终极冒泡算法', sortType: 'bubbleSort3' }
   ],
   selection: [{ name: '经典选择算法', sortType: 'selectionSort' }],
-  insertion: [{ name: '经典插入算法', sortType: 'insertionSort1' }]
+  insertion: [
+    { name: '经典插入算法', sortType: 'insertionSort1' },
+    { name: '二分插入算法', sortType: 'insertionSort2' }
+  ]
 }
 
 // 初始数据
@@ -481,6 +484,7 @@ export default {
      *              插入排序
      * ===================================
      **/
+    // 经典插入排序
     insertionSort1() {
       const nums = this.nums
       const len = nums.length
@@ -564,6 +568,47 @@ export default {
 
       const sorted = this.nums.map(item => item.num)
       console.log('insertionSort1 排序后-->', sorted)
+    },
+    // 二分插入排序
+    insertionSort2() {
+      const nums = this.nums
+      const len = nums.length
+      let data
+      for (let i = 1; i < len; i++) {
+        let k = nums[i]
+        let left = 0
+        let right = i - 1
+        while (left <= right) {
+          let middle = ~~((left + right) / 2)
+          if (k.num < nums[middle].num) {
+            right = middle - 1
+          } else {
+            left = middle + 1
+          }
+        }
+        for (let j = i - 1; j >= left; j--) {
+          ;[nums[j], nums[j + 1]] = [nums[j + 1], nums[j]]
+        }
+        ;[nums[left], k] = [k, nums[left]]
+
+        // 该轮排序完成
+        data = deepCopy(nums)
+        data.forEach((o, k) => {
+          if (k <= i) {
+            o.state = 2
+          }
+        })
+        this.snapShot.push(data)
+      }
+      data = deepCopy(nums)
+      data.forEach(o => {
+        o.state = 2
+      })
+      this.snapShot.push(deepCopy(data))
+      this.snapShot = this.removeDup(this.snapShot)
+
+      const sorted = this.nums.map(item => item.num)
+      console.log('insertionSort2 排序后-->', sorted)
     },
     /**
      * ===================================
