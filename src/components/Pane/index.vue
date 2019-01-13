@@ -518,6 +518,21 @@ export default {
         }
         ;[nums[j + 1], k] = [k, nums[j + 1]]
 
+        // 尾比较帧
+        if (j >= 0) {
+          data = deepCopy(nums)
+          data.forEach((o, k) => {
+            if (k <= i) {
+              o.state = 2
+            }
+          })
+          data[j + 1].state = 3
+          data[j].state = 1
+          this.snapShot.push(deepCopy(data))
+          console.log('尾比叫', j, data[j])
+        }
+
+        // 该轮排序完成
         data = deepCopy(nums)
         data.forEach((o, k) => {
           if (k <= i) {
