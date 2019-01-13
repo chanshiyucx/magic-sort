@@ -167,10 +167,8 @@ export default {
     getSortType() {
       if (mapping[this.type]) {
         this.sortType = mapping[this.type].find(o => o.name === this.curSortTab).sortType
-        if (this.curTab === this.type) {
-          this.init()
-          this.$nextTick(this.getTime)
-        }
+        this.init()
+        this.getTime()
       }
     },
     // 初始化
@@ -267,6 +265,19 @@ export default {
         behavior: 'smooth'
       })
     },
+    // 去重
+    removeDup(arr) {
+      const temp = []
+      const list = []
+      arr.forEach(o => {
+        const key = o.map(t => `${t.num}-${t.state}`).join('')
+        if (!temp.includes(key)) {
+          list.push(o)
+          temp.push(key)
+        }
+      })
+      return list
+    },
 
     /**
      * ===================================
@@ -294,9 +305,11 @@ export default {
               o.state = 2
             }
           })
-          this.snapShot.push([...data])
+          this.snapShot.push(data)
         }
       }
+      this.snapShot = this.removeDup(this.snapShot)
+
       const sorted = this.nums.map(item => item.num)
       console.log('bubbleSort1 排序后-->', sorted)
     },
@@ -323,14 +336,15 @@ export default {
               o.state = 2
             }
           })
-          this.snapShot.push([...data])
+          this.snapShot.push(data)
         }
         i = pos
       }
       // 制作动画帧
       const data = deepCopy(nums)
       data.forEach(o => (o.state = 2))
-      this.snapShot.push([...data])
+      this.snapShot.push(data)
+      this.snapShot = this.removeDup(this.snapShot)
 
       const sorted = this.nums.map(item => item.num)
       console.log('bubbleSort2 排序后-->', sorted)
@@ -357,7 +371,7 @@ export default {
               o.state = 2
             }
           })
-          this.snapShot.push([...data])
+          this.snapShot.push(data)
         }
         --high
 
@@ -376,7 +390,7 @@ export default {
               o.state = 2
             }
           })
-          this.snapShot.push([...data])
+          this.snapShot.push(data)
         }
         ++low
       }
@@ -384,7 +398,8 @@ export default {
       data.forEach(o => {
         o.state = 2
       })
-      this.snapShot.push([...data])
+      this.snapShot.push(data)
+      this.snapShot = this.removeDup(this.snapShot)
 
       const sorted = this.nums.map(item => item.num)
       console.log('bubbleSort3 排序后-->', sorted)
@@ -409,7 +424,7 @@ export default {
             o.state = 2
           }
         })
-        this.snapShot.push([...data])
+        this.snapShot.push(data)
         for (let j = i + 1; j < len; j++) {
           let temp = min
           if (nums[min].num > nums[j].num) {
@@ -425,7 +440,7 @@ export default {
                 o.state = 2
               }
             })
-            this.snapShot.push([...data])
+            this.snapShot.push(data)
           }
 
           data = deepCopy(nums)
@@ -436,7 +451,7 @@ export default {
               o.state = 2
             }
           })
-          this.snapShot.push([...data])
+          this.snapShot.push(data)
         }
         ;[nums[i], nums[min]] = [nums[min], nums[i]] // 交换位置
 
@@ -449,13 +464,14 @@ export default {
             o.state = 2
           }
         })
-        this.snapShot.push([...data])
+        this.snapShot.push(data)
       }
       data = deepCopy(nums)
       data.forEach(o => {
         o.state = 2
       })
-      this.snapShot.push([...data])
+      this.snapShot.push(data)
+      this.snapShot = this.removeDup(this.snapShot)
 
       const sorted = this.nums.map(item => item.num)
       console.log('selectionSort 排序后-->', sorted)
@@ -482,7 +498,6 @@ export default {
         })
         if (i > 1) data[i].state = 3
         this.snapShot.push(data)
-        console.log('111', data.map(o => o.state))
 
         // 先行比较
         if (nums[j].num <= k.num) {
@@ -493,11 +508,11 @@ export default {
             }
           })
           data[j + 1].state = 3
-          this.snapShot.push(deepCopy(data))
-          console.log('2221', data.map(o => o.state))
+          if (i === 1) {
+            this.snapShot.push(deepCopy(data))
+          }
           data[j].state = 1
           this.snapShot.push(deepCopy(data))
-          console.log('2222', data.map(o => o.state))
         }
 
         while (j >= 0 && nums[j].num > k.num) {
@@ -514,7 +529,6 @@ export default {
           data[j + 1].state = 3
           if (j < len - 2) data[j + 2].state = 1
           this.snapShot.push(data)
-          console.log('333', data.map(o => o.state))
         }
         ;[nums[j + 1], k] = [k, nums[j + 1]]
 
@@ -529,7 +543,6 @@ export default {
           data[j + 1].state = 3
           data[j].state = 1
           this.snapShot.push(deepCopy(data))
-          console.log('尾比叫', j, data[j])
         }
 
         // 该轮排序完成
@@ -540,7 +553,6 @@ export default {
           }
         })
         this.snapShot.push(data)
-        console.log('444', data.map(o => o.state))
       }
 
       data = deepCopy(nums)
@@ -548,6 +560,7 @@ export default {
         o.state = 2
       })
       this.snapShot.push(deepCopy(data))
+      this.snapShot = this.removeDup(this.snapShot)
 
       const sorted = this.nums.map(item => item.num)
       console.log('insertionSort1 排序后-->', sorted)
@@ -566,7 +579,7 @@ export default {
       }
       const endTime = performance.now()
       const total = endTime - startTime
-      this.total = String(total).slice(0, 6)
+      this.total = String(total).slice(0, 7)
     }
   }
 }
