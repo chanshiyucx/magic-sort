@@ -312,9 +312,6 @@ export default {
         }
       }
       this.snapShot = this.removeDup(this.snapShot)
-
-      const sorted = this.nums.map(item => item.num)
-      console.log('bubbleSort1 排序后-->', sorted)
     },
     // 改进冒泡算法
     bubbleSort2() {
@@ -348,9 +345,6 @@ export default {
       data.forEach(o => (o.state = 2))
       this.snapShot.push(data)
       this.snapShot = this.removeDup(this.snapShot)
-
-      const sorted = this.nums.map(item => item.num)
-      console.log('bubbleSort2 排序后-->', sorted)
     },
     // 终极冒泡算法
     bubbleSort3() {
@@ -403,9 +397,6 @@ export default {
       })
       this.snapShot.push(data)
       this.snapShot = this.removeDup(this.snapShot)
-
-      const sorted = this.nums.map(item => item.num)
-      console.log('bubbleSort3 排序后-->', sorted)
     },
     /**
      * ===================================
@@ -475,9 +466,6 @@ export default {
       })
       this.snapShot.push(data)
       this.snapShot = this.removeDup(this.snapShot)
-
-      const sorted = this.nums.map(item => item.num)
-      console.log('selectionSort 排序后-->', sorted)
     },
     /**
      * ===================================
@@ -565,9 +553,6 @@ export default {
       })
       this.snapShot.push(deepCopy(data))
       this.snapShot = this.removeDup(this.snapShot)
-
-      const sorted = this.nums.map(item => item.num)
-      console.log('insertionSort1 排序后-->', sorted)
     },
     // 二分插入排序
     insertionSort2() {
@@ -655,9 +640,6 @@ export default {
       })
       this.snapShot.push(deepCopy(data))
       this.snapShot = this.removeDup(this.snapShot)
-
-      const sorted = this.nums.map(item => item.num)
-      console.log('insertionSort2 排序后-->', sorted)
     },
     /**
      * ===================================
