@@ -578,6 +578,33 @@ export default {
         let k = nums[i]
         let left = 0
         let right = i - 1
+
+        // 下一个
+        data = deepCopy(nums)
+        data.forEach((o, k) => {
+          if (k < i) {
+            o.state = 2
+          }
+        })
+        if (i > 1) data[i].state = 3
+        this.snapShot.push(data)
+
+        // 先行比较
+        if (nums[i - 1].num <= k.num) {
+          data = deepCopy(nums)
+          data.forEach((o, k) => {
+            if (k < i) {
+              o.state = 2
+            }
+          })
+          data[i].state = 3
+          if (i === 1) {
+            this.snapShot.push(deepCopy(data))
+          }
+          data[i - 1].state = 1
+          this.snapShot.push(deepCopy(data))
+        }
+
         while (left <= right) {
           let middle = ~~((left + right) / 2)
           if (k.num < nums[middle].num) {
@@ -586,8 +613,30 @@ export default {
             left = middle + 1
           }
         }
+        // 插入标志帧
+        data = deepCopy(nums)
+        data.forEach((o, k) => {
+          if (k <= i) {
+            o.state = 2
+          }
+        })
+        data[i].state = 3
+        data[left].state = 3
+        this.snapShot.push(data)
+
         for (let j = i - 1; j >= left; j--) {
           ;[nums[j], nums[j + 1]] = [nums[j + 1], nums[j]]
+          // 逐个比较
+          data = deepCopy(nums)
+          data.forEach((o, k) => {
+            if (k <= i) {
+              o.state = 2
+            }
+          })
+          data[j + 1].state = 1
+          if (j < len - 2) data[j].state = 3
+          data[left].state = 3
+          this.snapShot.push(data)
         }
         ;[nums[left], k] = [k, nums[left]]
 
@@ -617,6 +666,7 @@ export default {
      **/
     getTime() {
       if (!algorithm[this.sortType]) return
+      if (this.type !== this.curTab) return
       const startTime = performance.now()
       for (let i = 0; i < 1000; i++) {
         const temp = [...initNums]
