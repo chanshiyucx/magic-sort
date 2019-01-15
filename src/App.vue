@@ -44,7 +44,8 @@ export default {
       tabs: [
         { label: '冒泡排序', type: 'bubble' },
         { label: '选择排序', type: 'selection' },
-        { label: '插入排序', type: 'insertion' }
+        { label: '插入排序', type: 'insertion' },
+        { label: '归并排序', type: 'merge' }
       ],
       curTab: 'bubble'
     }

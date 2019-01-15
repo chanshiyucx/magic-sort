@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/treasure/margicsort' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/treasure/magicsort' : '/',
   chainWebpack: config => {
     config.module
       .rule('raw')
