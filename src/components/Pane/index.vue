@@ -49,7 +49,7 @@
 import marked from 'marked'
 import Post from '../Post'
 import Prism from '../../assets/prism/prism.js'
-import { bubbleSort, selectionSort, insertionSort } from './md'
+import { bubbleSort, selectionSort, insertionSort, mergeSort } from './md'
 import * as algorithm from './algorithm'
 
 const renderer = new marked.Renderer()
@@ -64,7 +64,8 @@ marked.setOptions({
 const allSort = {
   bubble: bubbleSort,
   selection: selectionSort,
-  insertion: insertionSort
+  insertion: insertionSort,
+  merge: mergeSort
 }
 
 // 算法对应
@@ -78,7 +79,8 @@ const mapping = {
   insertion: [
     { name: '经典插入算法', sortType: 'insertionSort1' },
     { name: '二分插入算法', sortType: 'insertionSort2' }
-  ]
+  ],
+  merge: [{ name: '经典归并算法', sortType: 'mergeSort' }]
 }
 
 // 初始数据
@@ -171,7 +173,6 @@ export default {
       if (mapping[this.type]) {
         this.sortType = mapping[this.type].find(o => o.name === this.curSortTab).sortType
         this.init()
-        this.getTime()
       }
     },
     // 初始化
@@ -184,7 +185,10 @@ export default {
       this.snapShot = []
       this.nums = deepCopy(initData)
       this.generateStatus(this.nums, true)
-      this.sort()
+      if (this.curTab === this.type) {
+        this.sort()
+        this.getTime()
+      }
     },
     // 排序
     sort() {
@@ -653,6 +657,7 @@ export default {
      * ===================================
      **/
     getTime() {
+      console.log('getTime', this.sortType)
       if (!algorithm[this.sortType]) return
       if (this.type !== this.curTab) return
       const startTime = performance.now()
