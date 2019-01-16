@@ -7,8 +7,8 @@
           <p>
             当前排序算法： <span class="name">{{ curSortTab }}</span>
           </p>
-          <p>输入值：[20, 72, 31, 83, 9, 44, 14, 58, 51, 66, 38, 99, 40, 25, 88]</p>
-          <p>输出值：[9, 14, 20, 25, 31, 38, 40, 44, 51, 58, 66, 72, 83, 88, 99]</p>
+          <p>输入值：[20, 72, 31, 83, 9, 44, 14, 58, 51, 66, 38, 99, 40, 25, 88, 35]</p>
+          <p>输出值：[9, 14, 20, 25, 31, 35, 38, 40, 44, 51, 58, 66, 72, 83, 88, 99]</p>
           <p>千次排序总时长：{{ total }} ms 【数值可能有浮动，仅供参考】</p>
           <div class="btn-group">
             <button @click="toggleAnime">{{ this.timer ? '暂停' : '开始' }}</button>
@@ -84,11 +84,14 @@ const mapping = {
 }
 
 // 初始数据
-const initNums = [20, 72, 31, 83, 9, 44, 14, 58, 51, 66, 38, 99, 40, 25, 88]
+const initNums = [20, 72, 31, 83, 9, 44, 14, 58, 51, 66, 38, 99, 40, 25, 88, 35]
+
 // 生成 key
 const initData = initNums.map((num, i) => ({ num, key: `${num}_${i}` }))
 // 深拷贝
 const deepCopy = data => JSON.parse(JSON.stringify(data))
+
+const tempColor = ['#aaa', '#bbb', '#ccc', '#ddd', '#eee', '#111', '#222', '#333', '#444', '#555']
 
 export default {
   name: 'App',
@@ -104,6 +107,7 @@ export default {
       sortType: '',
       total: 0,
       nums: [],
+      mergeNums: [], // 归并排序用
       status: {}, // 用来保存信息
       snapShot: [], // 快照
       timer: '',
@@ -192,7 +196,9 @@ export default {
     },
     // 排序
     sort() {
-      if (this[this.sortType]) this[this.sortType]()
+      if (this[this.sortType]) {
+        this[this.sortType]()
+      }
     },
     // 生成位置
     generateStatus(data, init = false) {
@@ -650,7 +656,38 @@ export default {
      *              归并排序
      * ===================================
      **/
-    mergeSort() {},
+    mergeSort(nums) {
+      const len = nums.length
+      if (len === 1) return nums
+      let middle = Math.floor(len / 2)
+      let left = nums.slice(0, middle)
+      let right = nums.slice(middle)
+
+      left.forEach(o => {
+        o.state = 2
+      })
+      right.forEach(o => {
+        o.state = 3
+      })
+      const data = deepCopy(this.mergeNums)
+      this.snapShot.push(data)
+      console.log('this.snapShot', data, data.map(o => o.state), data.map(o => o.num))
+      const result = this.merge(this.mergeSort(left), this.mergeSort(right))
+      this.mergeNums = deepCopy(result)
+      return this.mergeNums
+    },
+    merge(left, right) {
+      console.log('letf', left, right)
+      const result = []
+      while (left.length && right.length) {
+        if (left[0].num < right[0].num) {
+          result.push(left.shift())
+        } else {
+          result.push(right.shift())
+        }
+      }
+      return result.concat(left, right)
+    },
     /**
      * ===================================
      *            获取算法运行时长

@@ -2,7 +2,7 @@
  * @Author: 蝉时雨
  * @Date: 2019-01-11 21:31:58
  * @Last Modified by: chenxin
- * @Last Modified time: 2019-01-16 09:56:39
+ * @Last Modified time: 2019-01-16 11:23:48
  * @Description: 获取算法运行时间
  */
 
@@ -101,29 +101,4 @@ export const insertionSort1 = nums => {
     ;[nums[i], nums[min]] = [nums[min], nums[i]] // 交换位置
   }
   return nums
-}
-
-/**
- * 经典归并排序
- */
-export const mergeSort = nums => {
-  const len = nums.length
-  if (len <= 1) return nums
-  let middle = ~~(len / 2)
-  let left = nums.slice(0, middle)
-  let right = nums.slice(middle)
-
-  return merge(mergeSort(left), mergeSort(right))
-}
-
-function merge(left, right) {
-  const result = []
-  while (left.length && right.length) {
-    if (left[0] < right[0]) {
-      result.push(left.shift())
-    } else {
-      result.push(right.shift())
-    }
-  }
-  return result.concat(left, right)
 }
