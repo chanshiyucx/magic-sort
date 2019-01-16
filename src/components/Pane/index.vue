@@ -91,8 +91,6 @@ const initData = initNums.map((num, i) => ({ num, key: `${num}_${i}` }))
 // 深拷贝
 const deepCopy = data => JSON.parse(JSON.stringify(data))
 
-const tempColor = ['#aaa', '#bbb', '#ccc', '#ddd', '#eee', '#111', '#222', '#333', '#444', '#555']
-
 export default {
   name: 'App',
   components: {
